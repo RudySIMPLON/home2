@@ -57,7 +57,10 @@ class EventController extends Controller
 
     public function returnCalendar($id){
         $conseiller = Conseiller::find($id);
-        $events = Event::get();
+
+        $events = Event::where('conseiller_id',  $conseiller->id)->get();
+        // var_dump($events);
+        // // $events = Event::get();
         $event_list = [];
         foreach ($events as $key => $event) {
             $event_list[] = Calendar::event(
@@ -67,7 +70,7 @@ class EventController extends Controller
                 new \DateTime($event->end_date.' +1 day')
                 );
         }
-        $calendar_details = Calendar::haddEvents($event_list); 
+        $calendar_details = Calendar::addEvents($event_list); 
 
         return view('events', compact('calendar_details','conseiller') );
     }
@@ -123,6 +126,8 @@ public function addHours(Request $request ,$id)
         // return Redirect::to('/agendaConseiller',);
         return Redirect::back();
     }
+
+    // public function delete
 
 
 
